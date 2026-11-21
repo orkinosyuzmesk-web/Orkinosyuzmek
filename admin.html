@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Orkinos Yönetim Paneli</title>
+<style>
+:root{--bg:#f2f6f9;--card:#fff;--ink:#0d2236;--mute:#5c7186;--line:#d9e3ea;--acc:#0a6fa8;--acc2:#0a5f8e;--ok:#12805c;--bad:#c0283c;--soft:#e7f1f7;--sh:0 1px 3px rgba(10,40,70,.1)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#08131f;--card:#0f2132;--ink:#e6f3fb;--mute:#8aa5b9;--line:#1d3a52;--acc:#3fc3e6;--acc2:#2aa8cc;--ok:#3ed19c;--bad:#ff6b7e;--soft:#12304a;--sh:none;color-scheme:dark}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+.hide{display:none!important}
+/* giriş */
+#login{max-width:460px;margin:0 auto;padding:max(24px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 40px max(16px,env(safe-area-inset-left))}
+#login h1{font-size:1.5rem;margin:22px 0 6px}#login p{color:var(--mute);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--sh)}
+label.f{display:block;font-weight:600;font-size:.86rem;margin:12px 0 5px}
+.in,select.in,textarea.in{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:44px}
+textarea.in{min-height:84px;resize:vertical}
+.in:focus{outline:2px solid var(--acc);outline-offset:1px}
+.hint{font-size:.8rem;color:var(--mute);margin:4px 0 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:600;transition:transform .12s,background .15s}
+.btn:active{transform:scale(.96)}.btn.p{background:var(--acc2);border-color:var(--acc2);color:#fff}.btn.d{color:var(--bad)}.btn.s{min-height:36px;padding:0 11px;font-size:.85rem}
+.btn:disabled{opacity:.55;cursor:default}
+/* uygulama */
+#app{display:grid;grid-template-columns:230px minmax(0,1fr) minmax(0,.9fr);height:100dvh}
+#app.nopv{grid-template-columns:230px minmax(0,1fr)}
+#side{border-right:1px solid var(--line);background:var(--card);overflow:auto;padding:12px 8px;padding-left:max(8px,env(safe-area-inset-left))}
+#side b.t{display:block;padding:8px 10px 12px;font-size:1.05rem}
+#side button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;background:none;border-radius:9px;cursor:pointer;color:var(--ink);margin:1px 0}
+#side button.on{background:var(--soft);font-weight:700;color:var(--acc2)}
+#side button .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--acc);margin-left:6px;vertical-align:middle}
+#main{display:flex;flex-direction:column;min-width:0;min-height:0}
+#top{display:flex;gap:8px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--card)}
+#top .st{flex:1;font-size:.82rem;color:var(--mute);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#form{flex:1;overflow:auto;padding:16px 16px 120px;-webkit-overflow-scrolling:touch}
+#form h2{margin:4px 0 14px;font-size:1.25rem}
+.fld{margin-bottom:14px}.fld>label{display:block;font-weight:600;font-size:.88rem;margin-bottom:5px}
+.chk{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);cursor:pointer}
+.chk input{width:20px;height:20px;accent-color:var(--acc2)}
+.col{display:flex;gap:10px;align-items:center}.col input[type=color]{width:56px;height:44px;padding:2px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.col .in{flex:1}
+.days{display:flex;flex-wrap:wrap;gap:6px}.days label{padding:9px 13px;border:1px solid var(--line);border-radius:999px;cursor:pointer;user-select:none}
+.days input{display:none}.days input:checked+span{font-weight:700}.days label:has(input:checked){background:var(--acc2);color:#fff;border-color:var(--acc2)}
+.img{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.img .th{width:84px;height:62px;border-radius:9px;background:var(--soft) center/cover no-repeat;border:1px solid var(--line);flex:none}
+.img .in{flex:1;min-width:160px}
+.item{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:var(--bg)}
+.item .hd{display:flex;align-items:center;gap:6px;margin-bottom:8px}.item .hd b{flex:1;font-size:.9rem}
+.mi{display:grid;grid-template-columns:110px 1fr;gap:12px}
+.mi .pv{width:110px;aspect-ratio:3/4;border-radius:10px;background:var(--soft) center/cover no-repeat;border:1px solid var(--line);position:relative;overflow:hidden}
+.mi .pv video{width:100%;height:100%;object-fit:cover}.mi .pv i{position:absolute;left:6px;bottom:6px;font-style:normal;font-size:.7rem;background:rgba(0,0,0,.6);color:#fff;padding:2px 7px;border-radius:99px}
+.mi .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mi.off{opacity:.55}
+.prog{height:6px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:8px}.prog i{display:block;height:100%;width:0;background:var(--acc2);transition:width .2s}
+#pv{border-left:1px solid var(--line);background:#0003;display:flex;flex-direction:column;min-width:0}
+#pv .bar{display:flex;gap:6px;padding:8px;align-items:center;background:var(--card);border-bottom:1px solid var(--line)}
+#pv .bar span{flex:1;font-size:.82rem;color:var(--mute)}
+#pv .wrap{flex:1;display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:10px}
+#pv iframe{border:0;background:#06304f;width:100%;height:100%;border-radius:10px}
+#pv.m iframe{width:390px;max-width:100%;border:8px solid #111;border-radius:26px}
+#toast{position:fixed;left:50%;bottom:max(84px,env(safe-area-inset-bottom));transform:translate(-50%,30px);background:#0d2236;color:#fff;padding:12px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;z-index:99;max-width:90vw;text-align:center;font-size:.9rem}
+#toast.on{opacity:1;transform:translate(-50%,0)}#toast.bad{background:var(--bad)}#toast.ok{background:var(--ok)}
+#sheet{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:80;display:flex;align-items:center;justify-content:center;padding:16px}
+#sheet .card{width:min(640px,100%);max-height:90dvh;overflow:auto}
+#savebar{display:none}
+.mbar{display:none}
+@media (max-width:1100px){#app{grid-template-columns:200px minmax(0,1fr)}#pv{position:fixed;inset:0;z-index:70;display:none}#pv.show{display:flex}}
+@media (max-width:760px){
+ #app{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);height:100dvh}
+ #side{display:flex;overflow-x:auto;overflow-y:hidden;border-right:0;border-bottom:1px solid var(--line);padding:6px;gap:4px;padding-top:max(6px,env(safe-area-inset-top))}
+ #side b.t{display:none}#side button{width:auto;white-space:nowrap;padding:9px 13px;background:var(--bg);border:1px solid var(--line);border-radius:999px;flex:none}
+ #form{padding:12px max(12px,env(safe-area-inset-right)) 130px max(12px,env(safe-area-inset-left))}
+ #top{display:none}
+ #savebar{display:flex;position:fixed;left:0;right:0;bottom:0;gap:8px;padding:10px max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));background:var(--card);border-top:1px solid var(--line);z-index:60}
+ #savebar .btn{flex:1}
+ .mi{grid-template-columns:84px 1fr}.mi .pv{width:84px}.mi .g2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="login">
+ <h1>Orkinos Yönetim Paneli</h1>
+ <p>Yazıları, renkleri, fotoğrafları, videoları ve kampanyayı buradan değiştir.</p>
+ <div class="card" id="lpw">
+  <label class="f" for="lp">Şifre</label><input class="in" id="lp" type="password" autocomplete="current-password" placeholder="Şifreni yaz">
+  <button class="btn p" id="lgo0" style="width:100%;margin-top:14px">Giriş yap</button>
+  <div class="hint" id="pmsg" style="color:var(--bad);min-height:20px;margin-top:8px"></div>
+ </div>
+ <div class="card hide" id="lgh">
+  <b>Bu cihazı siteye bağla (sadece bir kez)</b>
+  <p class="hint">Değişikliklerin siteye kaydedilmesi için GitHub erişim anahtarı gerekir. Bir kez girince bu cihaz hatırlar, sonraki girişlerde sadece şifre yeterli.</p>
+  <label class="f" for="lo">GitHub kullanıcı adı</label><input class="in" id="lo" autocapitalize="none" autocomplete="off" placeholder="ornek-kullanici">
+  <label class="f" for="lr">Depo (repository) adı</label><input class="in" id="lr" autocapitalize="none" autocomplete="off" placeholder="orkinos-yuzme">
+  <label class="f" for="lb">Dal (branch)</label><input class="in" id="lb" value="main" autocapitalize="none">
+  <label class="f" for="lt">Erişim anahtarı (token)</label><input class="in" id="lt" type="password" autocomplete="off" placeholder="github_pat_...">
+  <p class="hint">GitHub'da "Fine-grained token" oluştur, sadece bu depoyu seç, "Contents: Read and write" izni ver. Anahtar sadece bu cihazda saklanır.</p>
+  <button class="btn p" id="lgo" style="width:100%;margin-top:14px">Bağlan</button>
+  <div class="hint" id="lmsg" style="color:var(--bad);min-height:20px;margin-top:8px"></div>
+  <button class="btn" id="ldemo" style="width:100%;margin-top:6px">Anahtarsız dene (demo, siteye kaydetmez)</button>
+ </div>
+</div>
+
+<div id="app" class="hide">
+ <nav id="side" aria-label="Bölümler"></nav>
+ <section id="main">
+  <div id="top"><span class="st" id="st"></span><button class="btn s" id="tPv">Önizleme</button><button class="btn s" id="tBk">Yedek</button><button class="btn s" id="tOut">Çıkış</button><button class="btn p" id="tSave">Kaydet</button></div>
+  <div id="form"></div>
+ </section>
+ <aside id="pv"><div class="bar"><button class="btn s" id="pvM">Telefon</button><button class="btn s" id="pvR">Yenile</button><span id="pvT">Canlı önizleme</span><button class="btn s" id="pvX">Kapat</button></div><div class="wrap"><iframe id="fr" title="Site önizleme"></iframe></div></aside>
+</div>
+<div id="savebar" class="hide"><button class="btn" id="bPv">Önizleme</button><button class="btn" id="bMore">Daha fazla</button><button class="btn p" id="bSave">Kaydet</button></div>
+<div id="toast" role="status"></div>
+<script src="schema.js"></script>
+<script src="config.js"></script>
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return(r||document).querySelector(s)},$$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var DEFHASH='3cb63d3bd097f6669dc99cba239d80d83f11e1699ebee5d603dc245938bc6ba7',adminH=(window.ORKINOS&&window.ORKINOS.admin&&window.ORKINOS.admin.h)||DEFHASH,SCHEMA=window.SCHEMA,DEF=window.DEFAULTS,vals={},gh=null,demo=false,sha=null,dirty=false,cur='genel',pvTimer=0,saving=false;
+var DAYN=[['1','Pazartesi'],['2','Salı'],['3','Çarşamba'],['4','Perşembe'],['5','Cuma'],['6','Cumartesi'],['0','Pazar']];
+var PLACES=[['gallery','Galeri'],['hero','Ana ekran arka planı'],['about','Hakkımızda çerçevesi'],['hidden','Gizli (hiçbir yerde gösterme)']];
+function clone(o){return JSON.parse(JSON.stringify(o))}
+function el(t,a,k){var e=document.createElement(t);if(a)for(var n in a){if(n==='class')e.className=a[n];else if(n==='text')e.textContent=a[n];else if(n==='html')e.innerHTML=a[n];else if(n.slice(0,2)==='on')e.addEventListener(n.slice(2),a[n]);else if(a[n]!==false&&a[n]!=null)e.setAttribute(n,a[n])}(k||[]).forEach(function(c){if(c)e.appendChild(c)});return e}
+function toast(m,c){var t=$('#toast');t.textContent=m;t.className='on '+(c||'');clearTimeout(toast.t);toast.t=setTimeout(function(){t.className=''},c==='bad'?5200:2600)}
+function fieldOf(k){for(var i=0;i<SCHEMA.length;i++)for(var j=0;j<SCHEMA[i].f.length;j++)if(SCHEMA[i].f[j].k===k)return SCHEMA[i].f[j]}
+function eq(a,b){return JSON.stringify(a)===JSON.stringify(b)}
+function groupDirty(g){return g.f.some(function(f){return !eq(vals[f.k],DEF[f.k])})}
+
+/* ---------- veri ---------- */
+function loadVals(over){vals=clone(DEF);for(var k in over)if(k in vals)vals[k]=over[k]}
+function overrides(){var o={};for(var k in vals)if(!eq(vals[k],DEF[k]))o[k]=vals[k];return o}
+function cfgText(){var o={s:overrides()};if(adminH!==DEFHASH)o.admin={h:adminH};return'window.ORKINOS='+JSON.stringify(o,null,1)+';\n'}
+function hashPw(p){if(!(window.crypto&&crypto.subtle))return Promise.reject(new Error('Bu tarayıcı şifre kontrolünü desteklemiyor (https gerekir).'));return crypto.subtle.digest('SHA-256',new TextEncoder().encode('ork|'+String(p).trim().toLowerCase())).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return('0'+x.toString(16)).slice(-2)}).join('')})}
+function change(){dirty=true;setStatus();clearTimeout(pvTimer);pvTimer=setTimeout(pushPv,250)}
+function setStatus(t){var s=t||(dirty?'Kaydedilmemiş değişiklik var':(demo?'Demo modu':'Kayıtlı'));$('#st').textContent=(demo?'DEMO · ':(gh?gh.o+'/'+gh.r+' · ':''))+s;$$('#side button').forEach(function(b){var g=SCHEMA.filter(function(x){return x.id===b.dataset.g})[0];var d=b.querySelector('.dot');if(g&&groupDirty(g)){if(!d)b.appendChild(el('span',{class:'dot'}))}else if(d)d.remove()});
+  ['#tSave','#bSave'].forEach(function(q){$(q).textContent=saving?'Kaydediliyor…':(dirty?'Kaydet •':'Kaydet')})}
+
+/* ---------- GitHub ---------- */
+function b64(s){var by=new TextEncoder().encode(s),r='';for(var i=0;i<by.length;i+=8192)r+=String.fromCharCode.apply(null,by.subarray(i,i+8192));return btoa(r)}
+function unb64(s){var r=atob(s.replace(/\s/g,'')),a=new Uint8Array(r.length);for(var i=0;i<r.length;i++)a[i]=r.charCodeAt(i);return new TextDecoder().decode(a)}
+function api(path,opt){opt=opt||{};var ctl=new AbortController(),to=setTimeout(function(){ctl.abort()},opt.t||30000);
+  return fetch('https://api.github.com/repos/'+gh.o+'/'+gh.r+'/contents/'+path+(opt.method==='PUT'?'':'?ref='+encodeURIComponent(gh.b)+'&_='+Date.now()),{method:opt.method||'GET',signal:ctl.signal,cache:'no-store',headers:{'Authorization':'Bearer '+gh.t,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'},body:opt.body}).then(function(r){clearTimeout(to);return r.json().catch(function(){return{}}).then(function(j){if(!r.ok){var m=j.message||('Hata '+r.status);if(r.status===401)m='Anahtar (token) geçersiz ya da süresi dolmuş.';if(r.status===403)m='Bu anahtarın yazma izni yok. "Contents: Read and write" izni ver. ('+m+')';if(r.status===404&&opt.method==='PUT')m='Depo ya da dal bulunamadı. Kullanıcı, depo adı ve dalı kontrol et.';var e=new Error(m);e.status=r.status;throw e}return j})},function(e){clearTimeout(to);throw new Error(e.name==='AbortError'?'Bağlantı zaman aşımına uğradı. İnterneti kontrol edip tekrar dene.':'Bağlantı kurulamadı: '+e.message)})}
+function readCfg(){return api('config.js').then(function(j){sha=j.sha;var txt=unb64(j.content),m=txt.match(/window\.ORKINOS\s*=\s*([\s\S]*?);?\s*$/),o={};try{var jj=JSON.parse(m[1]);o=jj.s||{};if(jj.admin&&jj.admin.h)adminH=jj.admin.h}catch(e){}return o},function(e){if(e.status===404){sha=null;return{}}throw e})}
+function putFile(path,b64c,msg,s){var body={message:msg,content:b64c,branch:gh.b};if(s)body.sha=s;return api(path,{method:'PUT',body:JSON.stringify(body),t:90000})}
+function save(){if(saving)return;saving=true;setStatus('Kaydediliyor…');
+  var done=function(){saving=false;setStatus()};
+  if(demo){try{localStorage.setItem('ork_demo',JSON.stringify(overrides()))}catch(e){}dirty=false;done();toast('Demo kaydedildi. Bu tarayıcıda kalır, siteye gitmez.','ok');return}
+  readCfg().then(function(){return putFile('config.js',b64(cfgText()),'Yönetim paneli: ayarlar güncellendi',sha)}).then(function(j){sha=j.content.sha;return readCfg()}).then(function(o){
+    var okk=eq(o,overrides());dirty=!okk;done();toast(okk?'Kaydedildi. Site 1-2 dakika içinde güncellenir.':'Kaydedildi ama doğrulanamadı. Sayfayı yenileyip kontrol et.',okk?'ok':'bad')}).catch(function(e){done();toast('Kaydedilemedi: '+e.message,'bad')})}
+
+/* ---------- dosya yükleme ---------- */
+function readData(f){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result)};r.onerror=function(){rej(new Error('Dosya okunamadı'))};r.readAsDataURL(f)})}
+function resizeImg(file,max,q){return new Promise(function(res,rej){var u=URL.createObjectURL(file),im=new Image();im.onload=function(){var s=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);var x=c.getContext('2d');x.drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);var png=file.type==='image/png'&&file.size<900000;var d=c.toDataURL(png?'image/png':'image/jpeg',q);res({data:d,ext:png?'png':'jpg'})};im.onerror=function(){URL.revokeObjectURL(u);rej(new Error('Görsel açılamadı'))};im.src=u})}
+function poster(file){return new Promise(function(res){var u=URL.createObjectURL(file),v=document.createElement('video');v.muted=true;v.playsInline=true;v.preload='auto';var fin=function(d){URL.revokeObjectURL(u);res(d)};v.onloadeddata=function(){v.currentTime=Math.min(.6,(v.duration||1)/3)};v.onseeked=function(){try{var s=Math.min(1,720/Math.max(v.videoWidth,v.videoHeight)),c=document.createElement('canvas');c.width=Math.round(v.videoWidth*s);c.height=Math.round(v.videoHeight*s);c.getContext('2d').drawImage(v,0,0,c.width,c.height);fin(c.toDataURL('image/jpeg',.8))}catch(e){fin('')}};v.onerror=function(){fin('')};setTimeout(function(){fin('')},9000);v.src=u})}
+function slug(n){return String(n).toLowerCase().replace(/\.[^.]+$/,'').replace(/ı/g,'i').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,28)||'dosya'}
+function upload(file,kind,prog){ // -> Promise {src,poster,type}
+  var isV=/^video\//.test(file.type)||/\.(mp4|webm|mov)$/i.test(file.name),stamp=Date.now().toString(36);
+  if(isV&&kind==='img')return Promise.reject(new Error('Burada sadece fotoğraf yüklenebilir.'));
+  if(isV){if(file.size>25*1024*1024)return Promise.reject(new Error('Video 25 MB\'tan büyük. Önce küçült (örn. 720p) ve tekrar yükle.'));
+    if(demo)return Promise.reject(new Error('Demo modunda video yüklenemez. Gerçek bağlantıda çalışır.'));
+    var nm='video/'+slug(file.name)+'-'+stamp+'.'+(file.name.split('.').pop()||'mp4').toLowerCase();
+    return Promise.all([readData(file),poster(file)]).then(function(r){prog(.3);var pstr=r[1];return putFile(nm,r[0].split(',')[1],'Video eklendi',null).then(function(){prog(.8);if(!pstr)return{src:nm,poster:'',type:'video'};var pn='img/'+slug(file.name)+'-'+stamp+'-kapak.jpg';return putFile(pn,pstr.split(',')[1],'Video kapağı eklendi',null).then(function(){prog(1);return{src:nm,poster:pn,type:'video'}})})})}
+  return resizeImg(file,kind==='logo'?600:1600,.86).then(function(r){prog(.4);if(demo){prog(1);return{src:r.data,poster:'',type:'image'}}
+    var nm='img/'+slug(file.name)+'-'+stamp+'.'+r.ext;return putFile(nm,r.data.split(',')[1],'Fotoğraf eklendi',null).then(function(){prog(1);return{src:nm,poster:'',type:'image'}})})}
+function pickFile(accept,multi,cb){var i=el('input',{type:'file',accept:accept});if(multi)i.multiple=true;i.onchange=function(){if(i.files.length)cb(Array.prototype.slice.call(i.files))};i.click()}
+
+/* ---------- alan üreticileri ---------- */
+function inputFor(f,get,set,onStruct){
+  var v=get(),t=f.t;
+  if(t==='check'){var cb=el('input',{type:'checkbox'});cb.checked=!!v&&v!=='0';cb.onchange=function(){set(cb.checked?'1':'')};return el('label',{class:'chk'},[cb,el('span',{text:f.l})])}
+  var w=el('div',{class:'fld'});w.appendChild(el('label',{text:f.l}));
+  if(t==='text'){var i=el('input',{class:'in',value:v});i.oninput=function(){set(i.value)};w.appendChild(i)}
+  else if(t==='area'){var a=el('textarea',{class:'in'});a.value=v;a.oninput=function(){set(a.value)};w.appendChild(a)}
+  else if(t==='num'){var n=el('input',{class:'in',type:'number',inputmode:'numeric',min:f.min,max:f.max,value:v});n.oninput=function(){set(n.value===''?'':+n.value)};w.appendChild(n)}
+  else if(t==='color'){var c=el('input',{type:'color',value:/^#[0-9a-f]{6}$/i.test(v)?v:'#000000'}),tx=el('input',{class:'in',value:v});c.oninput=function(){tx.value=c.value;set(c.value)};tx.oninput=function(){if(/^#[0-9a-f]{6}$/i.test(tx.value)){c.value=tx.value;set(tx.value)}};w.appendChild(el('div',{class:'col'},[c,tx]))}
+  else if(t==='img'){var th=el('div',{class:'th'}),ti=el('input',{class:'in',value:v,placeholder:'Görsel adresi'}),pg=el('div',{class:'prog hide'},[el('i')]);function sh(){th.style.backgroundImage=ti.value?'url("'+ti.value.replace(/"/g,'%22')+'")':''}sh();ti.oninput=function(){set(ti.value);sh()};
+    var up=el('button',{class:'btn s',type:'button',text:'Fotoğraf yükle',onclick:function(){pickFile('image/*',false,function(fs){pg.classList.remove('hide');upload(fs[0],f.k==='logo'?'logo':'img',function(p){pg.firstChild.style.width=(p*100)+'%'}).then(function(r){ti.value=r.src;set(r.src);sh();pg.classList.add('hide');toast('Fotoğraf yüklendi. Kaydet\'e basmayı unutma.','ok')}).catch(function(e){pg.classList.add('hide');toast(e.message,'bad')})})}}),
+        cl=el('button',{class:'btn s d',type:'button',text:'Kaldır',onclick:function(){ti.value='';set('');sh()}});
+    w.appendChild(el('div',{class:'img'},[th,ti]));w.appendChild(el('div',{class:'col',style:'margin-top:8px'},[up,cl]));w.appendChild(pg)}
+  else if(t==='days'){var cur=(v||[]).map(String),d=el('div',{class:'days'});DAYN.forEach(function(x){var cb=el('input',{type:'checkbox',value:x[0]});cb.checked=cur.indexOf(x[0])>-1;cb.onchange=function(){var s=$$('input:checked',d).map(function(q){return +q.value});set(s)};d.appendChild(el('label',{},[cb,el('span',{text:x[1]})]))});w.appendChild(d)}
+  else if(t==='list'){w.appendChild(listEd(f,get,set))}
+  else if(t==='media'){w.appendChild(mediaEd(f,get,set))}
+  return w}
+function move(arr,i,d){var j=i+d;if(j<0||j>=arr.length)return;var x=arr[i];arr[i]=arr[j];arr[j]=x}
+function listEd(f,get,set){var box=el('div');function draw(){box.innerHTML='';var arr=get();arr.forEach(function(it,i){var c=el('div',{class:'item'});
+    c.appendChild(el('div',{class:'hd'},[el('b',{text:'#'+(i+1)+' '+(it[f.item[0].k]||'').slice(0,30)}),el('button',{class:'btn s',type:'button',text:'↑',onclick:function(){move(arr,i,-1);set(arr);draw()}}),el('button',{class:'btn s',type:'button',text:'↓',onclick:function(){move(arr,i,1);set(arr);draw()}}),delBtn(function(){arr.splice(i,1);set(arr);draw()})]));
+    f.item.forEach(function(sf){c.appendChild(inputFor(sf,function(){return it[sf.k]==null?'':it[sf.k]},function(v){it[sf.k]=v;set(arr)}))});box.appendChild(c)});
+    if(arr.length<(f.max||20))box.appendChild(el('button',{class:'btn',type:'button',text:'+ Yeni ekle',onclick:function(){var o={};f.item.forEach(function(s){o[s.k]=''});arr.push(o);set(arr);draw()}}));
+    if(!arr.length)box.insertBefore(el('p',{class:'hint',text:'Henüz kayıt yok. Boş bırakırsan bu bölüm sitede görünmez.'}),box.firstChild)}
+  draw();return box}
+function delBtn(fn){var b=el('button',{class:'btn s d',type:'button',text:'Sil'});var t;b.onclick=function(){if(b.dataset.a){fn();return}b.dataset.a=1;b.textContent='Emin misin?';t=setTimeout(function(){delete b.dataset.a;b.textContent='Sil'},2800)};return b}
+function mediaEd(f,get,set){var box=el('div'),add=el('div');
+  function draw(){box.innerHTML='';var arr=get();arr.forEach(function(m,i){var off=m.show===''||m.show==='0'||m.place==='hidden',isV=m.type==='video'||/\.(mp4|webm|mov)/i.test(m.src||'');
+    var pv=el('div',{class:'pv'});if(isV&&!m.poster)pv.appendChild(el('video',{src:m.src,muted:'',playsinline:'',preload:'metadata'}));else pv.style.backgroundImage='url("'+(m.poster||m.src||'').replace(/"/g,'%22')+'")';pv.appendChild(el('i',{text:isV?'Video':'Fotoğraf'}));
+    var ti=inputFor({l:'Başlık',t:'text'},function(){return m.title||''},function(v){m.title=v;set(arr)}),tx=inputFor({l:'Açıklama',t:'area'},function(){return m.text||''},function(v){m.text=v;set(arr)}),tg=inputFor({l:'Etiket (kartın köşesinde)',t:'text'},function(){return m.tag||''},function(v){m.tag=v;set(arr)});
+    var pl=el('select',{class:'in'});PLACES.forEach(function(p){var o=el('option',{value:p[0],text:p[1]});if((m.place||'gallery')===p[0])o.selected=true;pl.appendChild(o)});pl.onchange=function(){m.place=pl.value;set(arr);draw()};
+    var shw=inputFor({l:'Sitede göster',t:'check'},function(){return m.show},function(v){m.show=v;set(arr);draw()});
+    var note=m.place==='hero'||m.place==='about'?el('p',{class:'hint',text:(m.place==='hero'?'Ana ekranın arka planı olur.':'Hakkımızda bölümündeki çerçevede görünür.')+' Birden fazla seçersen listede ilk sıradaki kullanılır.'}):null;
+    var c=el('div',{class:'item mi'+(off?' off':'')},[pv,el('div',{},[el('div',{class:'hd'},[el('b',{text:'#'+(i+1)+' · sıra'}),el('button',{class:'btn s',type:'button',text:'↑ Yukarı',onclick:function(){move(arr,i,-1);set(arr);draw()}}),el('button',{class:'btn s',type:'button',text:'↓ Aşağı',onclick:function(){move(arr,i,1);set(arr);draw()}}),delBtn(function(){arr.splice(i,1);set(arr);draw()})]),ti,tx,el('div',{class:'g2'},[tg,el('div',{class:'fld'},[el('label',{text:'Yeri'}),pl])]),note,shw])]);box.appendChild(c)});
+    if(!arr.length)box.appendChild(el('p',{class:'hint',text:'Henüz fotoğraf ya da video yok.'}))}
+  var pg=el('div',{class:'prog hide'},[el('i')]),st=el('p',{class:'hint'});
+  add.appendChild(el('button',{class:'btn p',type:'button',text:'+ Fotoğraf / video ekle',onclick:function(){pickFile('image/*,video/mp4,video/webm,video/quicktime',true,function(fs){var arr=get(),n=0;pg.classList.remove('hide');
+      (function next(){if(n>=fs.length){pg.classList.add('hide');st.textContent='';draw();toast(n+' dosya eklendi. Başlığı yazıp Kaydet\'e bas.','ok');return}var file=fs[n];st.textContent='Yükleniyor ('+(n+1)+'/'+fs.length+'): '+file.name;
+        upload(file,'media',function(p){pg.firstChild.style.width=(p*100)+'%'}).then(function(r){arr.unshift({src:r.src,poster:r.poster,type:r.type,title:file.name.replace(/\.[^.]+$/,'').replace(/[-_]+/g,' '),text:'',tag:'',place:'gallery',show:'1'});set(arr);n++;next()}).catch(function(e){toast(file.name+': '+e.message,'bad');n++;next()})})()})}}));
+  add.appendChild(pg);add.appendChild(st);add.appendChild(el('p',{class:'hint',text:'Videolar 25 MB\'a kadar. Başlığı videonun içeriğine göre yaz. Çocuk görüntüleri için velilerden izin almayı unutma.'}));
+  draw();var wrap=el('div');wrap.appendChild(add);wrap.appendChild(el('div',{style:'height:12px'}));wrap.appendChild(box);return wrap}
+
+/* ---------- ekran ---------- */
+function nav(){var s=$('#side');s.innerHTML='';s.appendChild(el('b',{class:'t',text:'Orkinos Panel'}));SCHEMA.concat([{id:'pw',g:'Şifre'}]).forEach(function(g){var b=el('button',{type:'button','data-g':g.id,text:g.g,onclick:function(){cur=g.id;draw();$('#form').scrollTop=0;b.scrollIntoView&&b.scrollIntoView({block:'nearest',inline:'center'})}});s.appendChild(b)});mark()}
+function mark(){$$('#side button').forEach(function(b){b.classList.toggle('on',b.dataset.g===cur)});setStatus()}
+function drawPw(){var f=$('#form');f.innerHTML='';f.appendChild(el('h2',{text:'Şifre'}));var a=el('input',{class:'in',type:'password',autocomplete:'current-password'}),n=el('input',{class:'in',type:'password',autocomplete:'new-password'}),r=el('input',{class:'in',type:'password',autocomplete:'new-password'});
+  f.appendChild(el('div',{class:'card'},[el('div',{class:'fld'},[el('label',{text:'Şu anki şifre'}),a]),el('div',{class:'fld'},[el('label',{text:'Yeni şifre (en az 4 karakter)'}),n]),el('div',{class:'fld'},[el('label',{text:'Yeni şifre tekrar'}),r]),el('button',{class:'btn p',type:'button',text:'Şifreyi değiştir',onclick:function(){if(n.value.trim().length<4){toast('Yeni şifre en az 4 karakter olmalı.','bad');return}if(n.value!==r.value){toast('Yeni şifreler aynı değil.','bad');return}hashPw(a.value).then(function(h){if(h!==adminH){toast('Şu anki şifre yanlış.','bad');return}return hashPw(n.value).then(function(h2){adminH=h2;dirty=true;a.value=n.value=r.value='';save()})}).catch(function(e){toast(e.message,'bad')})}}),el('p',{class:'hint',text:'Şifre büyük/küçük harfe duyarlı değildir. Önemli: bu şifre paneli açan basit bir kapıdır. Kaydetme yetkisi asıl olarak GitHub anahtarındadır. Şifreyi kimseyle paylaşma.'})]));mark()}
+function draw(){if(cur==='pw')return drawPw();var g=SCHEMA.filter(function(x){return x.id===cur})[0],f=$('#form');f.innerHTML='';f.appendChild(el('h2',{text:g.g}));
+  g.f.forEach(function(fd){f.appendChild(inputFor(fd,function(){return vals[fd.k]},function(v){vals[fd.k]=v;change()}))});
+  var rb=el('button',{class:'btn s d',type:'button',text:'Bu bölümü ilk haline döndür'});var tt;rb.onclick=function(){if(!rb.dataset.a){rb.dataset.a=1;rb.textContent='Emin misin? Tekrar dokun';tt=setTimeout(function(){delete rb.dataset.a;rb.textContent='Bu bölümü ilk haline döndür'},3000);return}g.f.forEach(function(x){vals[x.k]=clone(DEF[x.k])});change();draw();toast('Bölüm ilk haline döndü. Kaydet\'e basınca siteye geçer.')};
+  f.appendChild(el('div',{style:'margin-top:18px'},[rb]));mark()}
+function pushPv(){var fr=$('#fr');try{fr.contentWindow.postMessage({type:'orkinos-cfg',cfg:{s:overrides()}},'*')}catch(e){}}
+function openPv(show){var p=$('#pv');if(window.innerWidth<=1100)p.classList.toggle('show',show);else{$('#app').classList.toggle('nopv',!show)}if(show){var fr=$('#fr');if(!fr.getAttribute('src')){fr.onload=function(){pushPv()};fr.src='index.html?preview=1'}else pushPv()}}
+function backup(){var s=el('div',{id:'sheet'}),ta=el('textarea',{class:'in',style:'min-height:200px;font:12px monospace'});ta.value=JSON.stringify(overrides(),null,1);
+  var c=el('div',{class:'card'},[el('b',{text:'Yedek'}),el('p',{class:'hint',text:'Bu metni kopyalayıp güvenli bir yere sakla. Geri yüklemek için metni yapıştırıp "Geri yükle"ye bas.'}),ta,el('div',{class:'col',style:'margin-top:10px;flex-wrap:wrap'},[el('button',{class:'btn p s',type:'button',text:'Kopyala',onclick:function(){ta.select();try{navigator.clipboard.writeText(ta.value).then(function(){toast('Kopyalandı','ok')},function(){document.execCommand('copy');toast('Kopyalandı','ok')})}catch(e){try{document.execCommand('copy');toast('Kopyalandı','ok')}catch(e2){}}}}),el('button',{class:'btn s',type:'button',text:'Geri yükle',onclick:function(){try{var o=JSON.parse(ta.value);if(typeof o!=='object'||!o)throw 0;loadVals(o);change();draw();s.remove();toast('Yedek yüklendi. Kaydet\'e basınca siteye geçer.','ok')}catch(e){toast('Metin geçerli bir yedek değil.','bad')}}}),el('button',{class:'btn s',type:'button',text:'Kapat',onclick:function(){s.remove()}})])]);s.appendChild(c);s.onclick=function(e){if(e.target===s)s.remove()};document.body.appendChild(s)}
+function enter(){$('#login').classList.add('hide');$('#app').classList.remove('hide');$('#savebar').classList.remove('hide');nav();draw();setStatus();if(window.innerWidth>1100)openPv(true)}
+function exit(){location.reload()}
+
+/* ---------- başlangıç ---------- */
+function connect(){var o=$('#lo').value.trim().replace(/^@/,''),r=$('#lr').value.trim(),b=$('#lb').value.trim()||'main',t=$('#lt').value.trim(),m=$('#lmsg'),btn=$('#lgo');
+  var mm=r.match(/github\.com\/([^\/]+)\/([^\/?#]+)/);if(mm){o=mm[1];r=mm[2]}r=r.replace(/\.git$/,'');
+  if(!o||!r||!t){m.textContent='Kullanıcı adı, depo adı ve anahtarı yaz.';return}
+  m.textContent='';btn.disabled=true;btn.textContent='Bağlanıyor…';gh={o:o,r:r,b:b,t:t};demo=false;
+  readCfg().then(function(ov){loadVals(ov);try{localStorage.setItem('ork_gh',JSON.stringify(gh))}catch(e){}btn.disabled=false;btn.textContent='Bağlan';dirty=false;enter()}).catch(function(e){btn.disabled=false;btn.textContent='Bağlan';gh=null;m.textContent=e.message})}
+$('#lgo').onclick=connect;
+$('#ldemo').onclick=function(){demo=true;var o={};try{o=JSON.parse(localStorage.getItem('ork_demo')||'{}')}catch(e){}loadVals(o);enter()};
+function guess(){try{var h=location.hostname,m=h.match(/^([^.]+)\.github\.io$/),p=location.pathname.split('/').filter(Boolean)[0];if(m&&!$('#lo').value)$('#lo').value=m[1];if(m&&p&&!/\.html$/.test(p)&&!$('#lr').value)$('#lr').value=p}catch(e){}}
+function remoteAdmin(){return fetch('config.js?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():''}).then(function(t){var m=t.match(/window\.ORKINOS\s*=\s*([\s\S]*?);?\s*$/);if(m){try{var j=JSON.parse(m[1]);if(j.admin&&j.admin.h)adminH=j.admin.h}catch(e){}}}).catch(function(){})}
+function pwLogin(){var m=$('#pmsg'),b=$('#lgo0');m.textContent='';b.disabled=true;
+  remoteAdmin().then(function(){return hashPw($('#lp').value)}).then(function(h){b.disabled=false;if(h!==adminH){m.textContent='Şifre yanlış.';return}
+    var sv=null;try{sv=JSON.parse(localStorage.getItem('ork_gh')||'null')}catch(e){}
+    $('#lpw').classList.add('hide');
+    if(sv&&sv.t){gh=sv;demo=false;b.disabled=true;readCfg().then(function(ov){loadVals(ov);dirty=false;enter()},function(e){gh=null;$('#lgh').classList.remove('hide');$('#lmsg').textContent=e.message})}
+    else{guess();$('#lgh').classList.remove('hide')}}).catch(function(e){b.disabled=false;m.textContent=e.message})}
+$('#lgo0').onclick=pwLogin;$('#lp').addEventListener('keydown',function(e){if(e.key==='Enter')pwLogin()});
+$('#tSave').onclick=save;$('#bSave').onclick=save;$('#tOut').onclick=exit;$('#tBk').onclick=backup;
+$('#tPv').onclick=function(){var open=window.innerWidth<=1100?!$('#pv').classList.contains('show'):$('#app').classList.contains('nopv');openPv(open)};
+$('#bPv').onclick=function(){openPv(true)};$('#bMore').onclick=function(){var s=el('div',{id:'sheet'},[el('div',{class:'card'},[el('b',{text:'Menü'}),el('div',{class:'col',style:'flex-direction:column;align-items:stretch;margin-top:12px'},[el('button',{class:'btn',type:'button',text:'Yedek al / geri yükle',onclick:function(){s.remove();backup()}}),el('button',{class:'btn d',type:'button',text:'Çıkış yap',onclick:exit}),el('button',{class:'btn',type:'button',text:'Kapat',onclick:function(){s.remove()}})])])]);s.onclick=function(e){if(e.target===s)s.remove()};document.body.appendChild(s)};
+$('#pvX').onclick=function(){openPv(false);$('#pv').classList.remove('show')};$('#pvR').onclick=function(){var f=$('#fr');f.src='index.html?preview=1&r='+Date.now()};
+$('#pvM').onclick=function(){var p=$('#pv');p.classList.toggle('m');$('#pvM').textContent=p.classList.contains('m')?'Geniş':'Telefon'};
+window.addEventListener('beforeunload',function(e){if(dirty){e.preventDefault();e.returnValue=''}});
+try{var sv=JSON.parse(localStorage.getItem('ork_gh')||'null');if(sv){$('#lo').value=sv.o;$('#lr').value=sv.r;$('#lb').value=sv.b;$('#lt').value=sv.t}}catch(e){}
+/* demo modunda site önizlemesi demo kaydını okusun */
+window.__ORK_DEMO_LOAD=function(){return demo?overrides():null};
+})();
+</script>
+</body>
+</html>
