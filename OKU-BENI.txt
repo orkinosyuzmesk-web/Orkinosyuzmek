@@ -1,0 +1,29 @@
+ORKINOS YÜZME SPOR KULÜBÜ - WEB SİTESİ (GitHub Pages)
+
+1) YÜKLEME
+ - github.com'da yeni bir depo (repository) oluştur, adı örn. orkinos-yuzme. Public olsun.
+ - Bu klasördeki TÜM dosyaları (img ve video klasörleri, .nojekyll dahil) depoya yükle.
+ - Depo > Settings > Pages > "Deploy from a branch" > main / (root) > Save.
+ - 1-2 dakika sonra site şu adreste açılır:  https://KULLANICI.github.io/DEPO/
+ - Yönetim paneli:                           https://KULLANICI.github.io/DEPO/admin.html
+
+2) YÖNETİM PANELİ GİRİŞİ
+ - Adres: https://KULLANICI.github.io/DEPO/admin.html
+ - Şifre: Muhammed 123  (büyük/küçük harf fark etmez). Panelde "Şifre" sekmesinden değiştirilir.
+ - İlk girişte (her cihazda bir kez) GitHub erişim anahtarı sorulur, çünkü değişikliklerin siteye kaydedilmesi için gerekir:
+   GitHub > Settings > Developer settings > Personal access tokens > Fine-grained tokens > Generate.
+   Repository access: sadece bu depo. Permissions > Contents: Read and write.
+   Sonraki girişlerde sadece şifre yeterli. Anahtar sadece o cihazda saklanır.
+ - Önemli: Şifre paneli açan basit bir kapıdır. Asıl kaydetme yetkisi GitHub anahtarındadır. Anahtarı ve şifreyi paylaşma.
+
+3) PANELDE NELER DEĞİŞİR
+ Tüm yazılar, renkler, logo, kampanya (fotoğraflı), açılış animasyonu, sayaçlar, eğitim kartları, seviyeler,
+ seviye testi soruları, SSS, veli rehberi, yorumlar, duyurular, iletişim bilgileri.
+ Fotoğraf/video bölümünde her dosyanın başlığı, açıklaması, etiketi, YERİ (galeri / ana ekran arka planı /
+ hakkımızda çerçevesi / gizli) ve SIRASI değiştirilir. "Kaydet"e basınca site 1-2 dakikada güncellenir.
+
+4) NOTLAR
+ - Videolar panelden en fazla 25 MB yüklenir. Büyükse önce küçült (720p yeterli).
+ - SSS, veli rehberi, havuz kuralları ve karşılaştırma tablosu hazır örnek metinlerdir. Kulübünüze göre kontrol edip panelden düzeltin.
+ - Çocuk fotoğraf/videolarını yayınlamadan önce velilerden yazılı izin alın (KVKK).
+ - Dosyalar: index.html, style.css, app.js, intro.js, schema.js, config.js (panel bunu yazar), admin.html.
